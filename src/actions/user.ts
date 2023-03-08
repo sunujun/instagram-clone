@@ -1,4 +1,4 @@
-import { ThunkAction } from 'redux-thunk';
+import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { IFeedInfo, IUserInfo } from 'InstagramClone';
 import { RootState } from '../store/store';
 import { sleep } from '../utils/sleep';
@@ -47,6 +47,7 @@ export const signIn = (): IUserInfoThunkAction => async dispatch => {
     );
 };
 
+export type IUserInfoDispatch = ThunkDispatch<RootState, undefined, IUserInfoActions>;
 export type IUserInfoThunkAction = ThunkAction<void, RootState, undefined, IUserInfoActions>;
 export type IUserInfoActions =
     | ReturnType<typeof setUserInfo>

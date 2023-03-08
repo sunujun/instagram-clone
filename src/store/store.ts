@@ -2,8 +2,8 @@ import { AnyAction, applyMiddleware, combineReducers, legacy_createStore as crea
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import logger from 'redux-logger';
 import thunk, { ThunkDispatch } from 'redux-thunk';
-import { userInfoReducer } from '../reducers/userInfo';
-import { feedListReducer } from '../reducers/feedList';
+import { IUserInfoReducer, userInfoReducer } from '../reducers/userInfo';
+import { feedListReducer, IFeedListReducer } from '../reducers/feedList';
 
 const rootReducer = combineReducers({
     userInfo: userInfoReducer,
@@ -11,6 +11,10 @@ const rootReducer = combineReducers({
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
+// export type RootReducer = {
+//     userInfo: IUserInfoReducer;
+//     feedList: IFeedListReducer;
+// };
 type TypedDispatch<T> = ThunkDispatch<T, any, AnyAction>;
 
 export const useAppDispatch = () => useDispatch<TypedDispatch<RootState>>();

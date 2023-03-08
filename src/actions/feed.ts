@@ -1,4 +1,4 @@
-import { ThunkAction } from 'redux-thunk';
+import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { IFeedInfo } from 'InstagramClone';
 import { RootState } from '../store/store';
 import { sleep } from '../utils/sleep';
@@ -86,7 +86,7 @@ export const getFeedList = (): IFeedListThunkAction => async dispatch => {
                     name: 'WRITER_NAME_01',
                     uid: 'WRITER_UID_01',
                 },
-                imageUrl: 'IMAGE_URL_01',
+                imageUrl: 'https://docs.expo.dev/static/images/tutorial/background-image.png',
                 likeHistory: ['UID_01', 'UID_02', 'UID_03'],
                 createdAt: new Date().getTime(),
             },
@@ -97,7 +97,7 @@ export const getFeedList = (): IFeedListThunkAction => async dispatch => {
                     name: 'WRITER_NAME_02',
                     uid: 'WRITER_UID_02',
                 },
-                imageUrl: 'IMAGE_URL_02',
+                imageUrl: 'https://docs.expo.dev/static/images/tutorial/background-image.png',
                 likeHistory: ['UID_01', 'UID_02', 'UID_03'],
                 createdAt: new Date().getTime(),
             },
@@ -108,7 +108,7 @@ export const getFeedList = (): IFeedListThunkAction => async dispatch => {
                     name: 'WRITER_NAME_03',
                     uid: 'WRITER_UID_03',
                 },
-                imageUrl: 'IMAGE_URL_03',
+                imageUrl: 'https://docs.expo.dev/static/images/tutorial/background-image.png',
                 likeHistory: ['UID_01', 'UID_02', 'UID_03'],
                 createdAt: new Date().getTime(),
             },
@@ -156,6 +156,7 @@ export const favoriteFeed =
         await sleep(1000);
     };
 
+export type IFeedListDispatch = ThunkDispatch<RootState, undefined, IFeedListActions>;
 export type IFeedListThunkAction = ThunkAction<void, RootState, undefined, IFeedListActions>;
 export type IFeedListActions =
     | ReturnType<typeof getFeedListRequest>
