@@ -1,8 +1,13 @@
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { RootApp } from './src/RootApp';
 
 function App(): JSX.Element {
-    return <SafeAreaProvider></SafeAreaProvider>;
+    return (
+        <SafeAreaProvider>
+            <RootApp />
+        </SafeAreaProvider>
+    );
 }
 
 export default App;
