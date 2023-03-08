@@ -1,5 +1,5 @@
 import { ThunkAction } from 'redux-thunk';
-import { IFeedInfo } from 'InstagramClone';
+import { IFeedInfo, IUserInfo } from 'InstagramClone';
 import { RootState } from '../store/store';
 import { sleep } from '../utils/sleep';
 import { getFeedListFailure } from './feed';
@@ -10,10 +10,10 @@ export const GET_MY_FEED_REQUEST = 'GET_MY_FEED_REQUEST' as const;
 export const GET_MY_FEED_SUCCESS = 'GET_MY_FEED_SUCCESS' as const;
 export const GET_MY_FEED_FAILURE = 'GET_MY_FEED_FAILURE' as const;
 
-export const setUserInfo = (userId: string) => {
+export const setUserInfo = (userInfo: IUserInfo) => {
     return {
         type: SET_USER_INFO,
-        userId,
+        userInfo,
     };
 };
 
@@ -38,7 +38,13 @@ export const getMyFeedFailure = () => {
 
 export const signIn = (): IUserInfoThunkAction => async dispatch => {
     await sleep(1000);
-    dispatch(setUserInfo('TEST'));
+    dispatch(
+        setUserInfo({
+            uid: 'TEST_UID',
+            name: 'TEST_NAME',
+            profileImage: 'TEST_PROFILE_IMAGE',
+        }),
+    );
 };
 
 export type IUserInfoThunkAction = ThunkAction<void, RootState, undefined, IUserInfoActions>;
