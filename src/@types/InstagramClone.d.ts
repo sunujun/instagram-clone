@@ -10,4 +10,10 @@ declare module 'InstagramClone' {
         likeHistory: string[];
         createdAt: number;
     };
+
+    export type IUserInfo = {
+        name: string;
+        profileImage: string;
+        uid: string;
+    };
 }
