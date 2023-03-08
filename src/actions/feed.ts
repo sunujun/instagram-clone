@@ -59,10 +59,12 @@ export const favoriteFeedRequest = () => {
     };
 };
 
-export const favoriteFeedSuccess = (feedId: IFeedInfo['id']) => {
+export const favoriteFeedSuccess = (feedId: IFeedInfo['id'], myId: string, action: 'add' | 'remove') => {
     return {
         type: FAVORITE_FEED_SUCCESS,
         feedId,
+        myId,
+        action,
     };
 };
 
@@ -138,10 +140,20 @@ export const createFeed =
 
 export const favoriteFeed =
     (item: IFeedInfo): IFeedListThunkAction =>
-    async dispatch => {
+    async (dispatch, getState) => {
         dispatch(favoriteFeedRequest());
+        const myId = getState().userInfo.userInfo?.uid ?? null;
+        if (myId === null) {
+            dispatch(favoriteFeedFailure());
+            return;
+        }
+        const hasMyId = item.likeHistory.filter(likeUserId => likeUserId === myId).length > 0;
+        if (hasMyId) {
+            dispatch(favoriteFeedSuccess(item.id, myId, 'remove'));
+        } else {
+            dispatch(favoriteFeedSuccess(item.id, myId, 'add'));
+        }
         await sleep(1000);
-        dispatch(favoriteFeedSuccess(item.id));
     };
 
 export type IFeedListThunkAction = ThunkAction<void, RootState, undefined, IFeedListActions>;
