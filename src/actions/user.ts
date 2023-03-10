@@ -47,6 +47,48 @@ export const signIn = (): IUserInfoThunkAction => async dispatch => {
     );
 };
 
+export const getMyFeedList = (): IUserInfoThunkAction => async dispatch => {
+    dispatch(getMyFeedRequest());
+    await sleep(500);
+    dispatch(
+        getMyFeedSuccess([
+            {
+                id: 'ID_01',
+                content: 'CONTENT_01',
+                writer: {
+                    name: 'WRITER_NAME_01',
+                    uid: 'WRITER_UID_01',
+                },
+                imageUrl: 'https://docs.expo.dev/static/images/tutorial/background-image.png',
+                likeHistory: ['UID_01', 'UID_02', 'UID_03'],
+                createdAt: new Date().getTime(),
+            },
+            {
+                id: 'ID_02',
+                content: 'CONTENT_02',
+                writer: {
+                    name: 'WRITER_NAME_02',
+                    uid: 'WRITER_UID_02',
+                },
+                imageUrl: 'https://docs.expo.dev/static/images/tutorial/background-image.png',
+                likeHistory: ['UID_01', 'UID_02', 'UID_03'],
+                createdAt: new Date().getTime(),
+            },
+            {
+                id: 'ID_03',
+                content: 'CONTENT_03',
+                writer: {
+                    name: 'WRITER_NAME_03',
+                    uid: 'WRITER_UID_03',
+                },
+                imageUrl: 'https://docs.expo.dev/static/images/tutorial/background-image.png',
+                likeHistory: ['UID_01', 'UID_02', 'UID_03'],
+                createdAt: new Date().getTime(),
+            },
+        ]),
+    );
+};
+
 export type IUserInfoDispatch = ThunkDispatch<RootState, undefined, IUserInfoActions>;
 export type IUserInfoThunkAction = ThunkAction<void, RootState, undefined, IUserInfoActions>;
 export type IUserInfoActions =
