@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { launchImageLibrary } from 'react-native-image-picker';
 import { Header } from '../components/Header/Header';
 import { RootStackScreenProps } from '../navigation/types';
 import { Button } from '../components/Button';
@@ -15,7 +16,7 @@ export const AddFeedScreen = () => {
     const navigation = useNavigation<RootStackScreenProps<'AddFeed'>['navigation']>();
     const safeAreaInsets = useSafeAreaInsets();
 
-    const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null);
+    const [selectedPhoto, setSelectedPhoto] = useState<string>();
     const [inputMessage, setInputMessage] = useState('');
 
     const canSave = useMemo(() => {
@@ -33,7 +34,16 @@ export const AddFeedScreen = () => {
         navigation.navigate('AddFeed');
     };
 
-    const onPressGetPhoto = () => {};
+    const onPressGetPhoto = async () => {
+        const result = await launchImageLibrary({
+            mediaType: 'photo',
+            quality: 1,
+        });
+        if (result.didCancel) {
+            return;
+        }
+        setSelectedPhoto(result.assets?.[0].uri);
+    };
 
     const onPressSave = () => {
         if (!canSave) {
@@ -49,8 +59,8 @@ export const AddFeedScreen = () => {
             </Header>
             <View style={{ flex: 1, flexDirection: 'column', paddingHorizontal: 20, paddingTop: 32 }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Button>
-                        {selectedPhoto !== null ? (
+                    <Button onPress={onPressGetPhoto}>
+                        {selectedPhoto !== undefined ? (
                             <RemoteImage url={selectedPhoto} width={100} height={100} style={{ borderRadius: 4 }} />
                         ) : (
                             <View

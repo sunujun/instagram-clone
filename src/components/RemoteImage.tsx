@@ -7,7 +7,7 @@ export const RemoteImage = ({
     width,
     height,
 }: {
-    url: string;
+    url?: string;
     style?: StyleProp<ImageStyle>;
     width: number;
     height: number;
