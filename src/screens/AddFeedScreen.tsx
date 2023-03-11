@@ -4,13 +4,13 @@ import { useNavigation } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { Header } from '../components/Header/Header';
-import { RootStackScreenProps } from '../navigation/types';
 import { Button } from '../components/Button';
 import { RemoteImage } from '../components/RemoteImage';
 import { Icon } from '../components/Icon';
 import { MultiLineInput } from '../components/MultiLineInput';
 import { Spacer } from '../components/Spacer';
 import { Typography } from '../components/Typography';
+import { RootStackScreenProps } from '../navigation/types';
 
 export const AddFeedScreen = () => {
     const navigation = useNavigation<RootStackScreenProps<'AddFeed'>['navigation']>();

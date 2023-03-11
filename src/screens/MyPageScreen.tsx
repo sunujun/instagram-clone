@@ -6,6 +6,7 @@ import { Header } from '../components/Header/Header';
 import { RemoteImage } from '../components/RemoteImage';
 import { useMyFeedList } from '../selectors/user';
 import { useAppDispatch } from '../store/store';
+import { getMyFeedList } from '../actions/user';
 
 export const MyPageScreen = () => {
     const data = useMyFeedList();
@@ -17,7 +18,7 @@ export const MyPageScreen = () => {
         return width / 3;
     }, [width]);
 
-    // useEffect(() => dispatch(getMyFeedList()), [dispatch]);
+    useEffect(() => dispatch(getMyFeedList()), [dispatch]);
 
     return (
         <View style={{ flex: 1 }}>
