@@ -1,21 +1,48 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View } from 'react-native';
-import { Typography } from './components/Typography';
+import { GoogleSignin, GoogleSigninButton } from '@react-native-google-signin/google-signin';
+import { useAppDispatch } from './store/store';
+import { signIn } from './actions/user';
 
 type SplashViewProps = {
     onFinishLoad: () => void;
 };
 
 export const SplashView = ({ onFinishLoad }: SplashViewProps) => {
-    useEffect(() => {
-        setTimeout(() => {
+    const dispatch = useAppDispatch();
+
+    const [showLoginButton, setShowLoginButton] = useState(false);
+
+    const appInit = useCallback(async () => {
+        try {
+            const { idToken } = await GoogleSignin.signInSilently();
+            if (idToken !== null) {
+                dispatch(signIn(idToken));
+                onFinishLoad();
+            }
+        } catch (e) {
+            setShowLoginButton(true);
+        }
+    }, [dispatch, onFinishLoad]);
+
+    const onPressSignIn = async () => {
+        await GoogleSignin.hasPlayServices({
+            showPlayServicesUpdateDialog: true,
+        });
+        const { idToken } = await GoogleSignin.signIn();
+        if (idToken !== null) {
+            dispatch(signIn(idToken));
             onFinishLoad();
-        }, 1000);
-    }, [onFinishLoad]);
+        }
+    };
+
+    useEffect(() => {
+        appInit();
+    }, [appInit]);
 
     return (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Typography fontSize={36}>SPLASH VIEW</Typography>
+            {showLoginButton && <GoogleSigninButton onPress={onPressSignIn} />}
         </View>
     );
 };
