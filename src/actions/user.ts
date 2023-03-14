@@ -53,28 +53,32 @@ export const signIn =
         const googleSignInCredential = auth.GoogleAuthProvider.credential(idToken);
         const signInResult = await auth().signInWithCredential(googleSignInCredential);
         const userDB = database().ref(`/users/${signInResult.user.uid}`);
-        const user = await userDB.once('value').then(snapshot => snapshot.val());
-        const now = new Date().getTime();
-        if (user === null) {
-            await userDB.set({
-                name: signInResult.user.displayName,
-                profileImage: signInResult.user.photoURL,
-                uid: signInResult.user.uid,
-                createdAt: now,
-                lastLoginAt: now,
-            });
-        } else {
-            await userDB.update({
-                lastLoginAt: now,
-            });
+        try {
+            const user = await userDB.once('value').then(snapshot => snapshot.val());
+            const now = new Date().getTime();
+            if (user === null) {
+                await userDB.set({
+                    name: signInResult.user.displayName,
+                    profileImage: signInResult.user.photoURL,
+                    uid: signInResult.user.uid,
+                    createdAt: now,
+                    lastLoginAt: now,
+                });
+            } else {
+                await userDB.update({
+                    lastLoginAt: now,
+                });
+            }
+            dispatch(
+                setUserInfo({
+                    uid: signInResult.user.uid,
+                    name: signInResult.user.displayName ?? 'unknown',
+                    profileImage: signInResult.user.photoURL ?? '',
+                }),
+            );
+        } catch (e) {
+            console.log(e);
         }
-        dispatch(
-            setUserInfo({
-                uid: signInResult.user.uid,
-                name: signInResult.user.displayName ?? 'unknown',
-                profileImage: signInResult.user.photoURL ?? '',
-            }),
-        );
     };
 
 export const getMyFeedList = (): IUserInfoThunkAction => async dispatch => {
