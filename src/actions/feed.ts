@@ -1,4 +1,7 @@
+import { Platform } from 'react-native';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
+import storage from '@react-native-firebase/storage';
+import database from '@react-native-firebase/database';
 import { IFeedInfo } from 'InstagramClone';
 import { RootState } from '../store/store';
 import { sleep } from '../utils/sleep';
@@ -122,20 +125,56 @@ export const createFeed =
         dispatch(createFeedRequest());
         const createdAt = new Date().getTime();
         const userInfo = getState().userInfo.userInfo;
-        await sleep(200);
-        dispatch(
-            createFeedSuccess({
-                id: 'ID_01',
-                content: item.content,
-                writer: {
-                    name: userInfo?.name ?? 'unknown',
-                    uid: userInfo?.uid ?? 'unknown',
-                },
-                imageUrl: item.imageUrl,
-                likeHistory: [],
-                createdAt: createdAt,
-            }),
-        );
+        const pickPhotoUrlList = item.imageUrl.split('/');
+        const pickPhotoFileName = pickPhotoUrlList[pickPhotoUrlList.length - 1];
+        const putFileUrl = await storage()
+            .ref(pickPhotoFileName)
+            .putFile(Platform.OS === 'ios' ? item.imageUrl.replace('file://', '') : item.imageUrl)
+            .then(result => storage().ref(result.metadata.fullPath).getDownloadURL());
+        const feedDB = database().ref('/feed');
+        const saveItem: Omit<IFeedInfo, 'id'> = {
+            content: item.content,
+            writer: {
+                name: userInfo?.name ?? 'unknown',
+                uid: userInfo?.uid ?? 'unknown',
+            },
+            imageUrl: putFileUrl,
+            likeHistory: [],
+            createdAt,
+        };
+        await feedDB.push().set({
+            ...saveItem,
+        });
+        const lastFeedList = await feedDB.once('value').then(snapshot => snapshot.val());
+        Object.keys(lastFeedList).forEach(key => {
+            const _item = lastFeedList[key];
+            if (_item.createdAt === createdAt && putFileUrl === _item.imageUrl) {
+                dispatch(
+                    createFeedSuccess({
+                        id: key,
+                        content: _item.content,
+                        writer: _item.writer,
+                        imageUrl: _item.imageUrl,
+                        likeHistory: _item.likeHistory ?? [],
+                        createdAt,
+                    }),
+                );
+            }
+        });
+        // await sleep(200);
+        // dispatch(
+        //     createFeedSuccess({
+        //         id: 'ID_01',
+        //         content: item.content,
+        //         writer: {
+        //             name: userInfo?.name ?? 'unknown',
+        //             uid: userInfo?.uid ?? 'unknown',
+        //         },
+        //         imageUrl: item.imageUrl,
+        //         likeHistory: [],
+        //         createdAt: createdAt,
+        //     }),
+        // );
     };
 
 export const favoriteFeed =

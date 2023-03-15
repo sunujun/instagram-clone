@@ -11,10 +11,13 @@ import { MultiLineInput } from '../components/MultiLineInput';
 import { Spacer } from '../components/Spacer';
 import { Typography } from '../components/Typography';
 import { RootStackScreenProps } from '../navigation/types';
+import { useAppDispatch } from '../store/store';
+import { createFeed } from '../actions/feed';
 
 export const AddFeedScreen = () => {
     const navigation = useNavigation<RootStackScreenProps<'AddFeed'>['navigation']>();
     const safeAreaInsets = useSafeAreaInsets();
+    const dispatch = useAppDispatch();
 
     const [selectedPhoto, setSelectedPhoto] = useState<string>();
     const [inputMessage, setInputMessage] = useState('');
@@ -49,6 +52,16 @@ export const AddFeedScreen = () => {
         if (!canSave) {
             return;
         }
+        if (selectedPhoto === undefined) {
+            return;
+        }
+        dispatch(
+            createFeed({
+                imageUrl: selectedPhoto,
+                content: inputMessage,
+            }),
+        );
+        navigation.goBack();
     };
 
     return (
