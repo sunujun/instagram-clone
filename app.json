@@ -1,4 +1,7 @@
 {
-  "name": "InstagramClone",
-  "displayName": "InstagramClone"
+    "name": "InstagramClone",
+    "displayName": "InstagramClone",
+    "react-native-google-mobile-ads": {
+        "android_app_id": "ca-app-pub-1247882024503140~6998845932"
+    }
 }

@@ -2,9 +2,17 @@ import React, { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import mobileAds, { BannerAd, TestIds, BannerAdSize } from 'react-native-google-mobile-ads';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { RootApp } from './src/RootApp';
 import store from './src/store/store';
+
+mobileAds()
+    .initialize()
+    .then(adapterStatuses => {
+        // Initialization complete!
+        console.log(adapterStatuses);
+    });
 
 function App(): JSX.Element {
     const googleSignInConfigure = () => {
@@ -22,6 +30,7 @@ function App(): JSX.Element {
             <GestureHandlerRootView style={{ flex: 1 }}>
                 <SafeAreaProvider>
                     <RootApp />
+                    <BannerAd unitId={TestIds.BANNER} size={BannerAdSize.FULL_BANNER} />
                 </SafeAreaProvider>
             </GestureHandlerRootView>
         </Provider>
