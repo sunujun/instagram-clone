@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { FlatList, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
-import { getFeedList, IFeedListDispatch } from '../actions/feed';
+import { favoriteFeed, getFeedList, IFeedListDispatch } from '../actions/feed';
 import { FeedListItem } from '../components/FeedListItem';
 import { Header } from '../components/Header/Header';
 import { Spacer } from '../components/Spacer';
@@ -40,7 +40,9 @@ export const HomeScreen = () => {
                             writer={item.writer.name}
                             createdAt={item.createdAt}
                             onPressFeed={() => {}}
-                            onPressFavorite={() => {}}
+                            onPressFavorite={() => {
+                                dispatch(favoriteFeed(item));
+                            }}
                         />
                     );
                 }}

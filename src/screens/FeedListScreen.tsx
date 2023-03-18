@@ -5,10 +5,13 @@ import { FeedListItem } from '../components/FeedListItem';
 import { Header } from '../components/Header/Header';
 import { Spacer } from '../components/Spacer';
 import { RootStackScreenProps } from '../navigation/types';
+import { useAppDispatch } from '../store/store';
+import { favoriteFeed } from '../actions/feed';
 
 export const FeedListScreen = () => {
     const route = useRoute<RootStackScreenProps<'FeedList'>['route']>();
     const navigation = useNavigation<RootStackScreenProps<'FeedList'>['navigation']>();
+    const dispatch = useAppDispatch();
 
     return (
         <View style={{ flex: 1 }}>
@@ -28,7 +31,9 @@ export const FeedListScreen = () => {
                             writer={item.writer.name}
                             createdAt={item.createdAt}
                             onPressFeed={() => {}}
-                            onPressFavorite={() => {}}
+                            onPressFavorite={() => {
+                                dispatch(favoriteFeed(item));
+                            }}
                         />
                     );
                 }}

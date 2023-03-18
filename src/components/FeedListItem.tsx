@@ -28,32 +28,26 @@ export const FeedListItem = ({
     const { width } = useWindowDimensions();
 
     return (
-        <View>
-            <View>
-                <View style={{ width: width, height: width }}>
-                    <RemoteImage url={image} width={width} height={width} />
-                </View>
-                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Button onPress={onPressFavorite}>
-                        <View style={{ paddingHorizontal: 12, paddingVertical: 6 }}>
-                            <Icon
-                                name={isLiked ? 'heart' : 'heart-outline'}
-                                size={20}
-                                color={isLiked ? 'red' : 'black'}
-                            />
-                        </View>
-                    </Button>
-                </View>
-                <View style={{ paddingHorizontal: 12 }}>
-                    <Typography fontSize={16}>{`좋아요 ${likeCount}개`}</Typography>
-                    <Spacer space={4} />
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Typography fontSize={16}>{writer}</Typography>
-                        <Spacer space={8} horizontal />
-                        <Typography fontSize={16}>{comment}</Typography>
+        <Button onPress={onPressFeed}>
+            <View style={{ width: width, height: width }}>
+                <RemoteImage url={image} width={width} height={width} />
+            </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Button onPress={onPressFavorite}>
+                    <View style={{ paddingHorizontal: 12, paddingVertical: 6 }}>
+                        <Icon name={isLiked ? 'heart' : 'heart-outline'} size={20} color={isLiked ? 'red' : 'black'} />
                     </View>
+                </Button>
+            </View>
+            <View style={{ paddingHorizontal: 12 }}>
+                <Typography fontSize={16}>{`좋아요 ${likeCount}개`}</Typography>
+                <Spacer space={4} />
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Typography fontSize={16}>{writer}</Typography>
+                    <Spacer space={8} horizontal />
+                    <Typography fontSize={16}>{comment}</Typography>
                 </View>
             </View>
-        </View>
+        </Button>
     );
 };

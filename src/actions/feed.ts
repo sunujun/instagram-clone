@@ -201,13 +201,30 @@ export const favoriteFeed =
             dispatch(favoriteFeedFailure());
             return;
         }
-        const hasMyId = item.likeHistory.filter(likeUserId => likeUserId === myId).length > 0;
-        if (hasMyId) {
-            dispatch(favoriteFeedSuccess(item.id, myId, 'remove'));
-        } else {
+        const feedDB = database().ref(`/feed/${item.id}`);
+        const feedItem: IFeedInfo = await feedDB.once('value').then(snapshot => snapshot.val());
+        // feed 리소스에 likeHistory가 없으면 추가
+        if (typeof feedItem.likeHistory === 'undefined') {
+            await feedDB.update({
+                likeHistory: [myId],
+            });
             dispatch(favoriteFeedSuccess(item.id, myId, 'add'));
+        } else {
+            const hasMyId = item.likeHistory.filter(likeUserId => likeUserId === myId).length > 0;
+            if (hasMyId) {
+                // likeHistory에 내 uid 값이 있으면 삭제
+                await feedDB.update({
+                    likeHistory: feedItem.likeHistory.filter(likeUserId => likeUserId !== myId),
+                });
+                dispatch(favoriteFeedSuccess(item.id, myId, 'remove'));
+            } else {
+                // likeHistory에 내 uid 값이 없으면 추가
+                await feedDB.update({
+                    likeHistory: feedItem.likeHistory.concat([myId]),
+                });
+                dispatch(favoriteFeedSuccess(item.id, myId, 'add'));
+            }
         }
-        await sleep(1000);
     };
 
 export type IFeedListDispatch = ThunkDispatch<RootState, undefined, IFeedListActions>;
