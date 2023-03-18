@@ -18,7 +18,9 @@ export const MyPageScreen = () => {
         return width / 3;
     }, [width]);
 
-    useEffect(() => dispatch(getMyFeedList()), [dispatch]);
+    useEffect(() => {
+        dispatch(getMyFeedList());
+    }, [dispatch]);
 
     return (
         <View style={{ flex: 1 }}>

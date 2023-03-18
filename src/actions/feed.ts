@@ -79,10 +79,13 @@ export const favoriteFeedFailure = () => {
 
 export const getFeedList = (): IFeedListThunkAction => async dispatch => {
     dispatch(getFeedListRequest());
+    /** feed database에 있는 리소스 가져오기 */
     const lastFeedList = await database()
         .ref('/feed')
         .once('value')
         .then(snapshot => snapshot.val());
+    // Object.keys(lastFeedList): key로 이루어진 배열
+    /** feed 정보에 id값과 likeHistory 추가하여 가공 */
     const result = Object.keys(lastFeedList).map(key => {
         return {
             ...lastFeedList[key],
@@ -157,7 +160,7 @@ export const createFeed =
         await feedDB.push().set({
             ...saveItem,
         });
-        const lastFeedList = await feedDB.once('value').then(snapshot => snapshot.val());
+        const lastFeedList: { [key: string]: IFeedInfo } = await feedDB.once('value').then(snapshot => snapshot.val());
         Object.keys(lastFeedList).forEach(key => {
             const _item = lastFeedList[key];
             if (_item.createdAt === createdAt && putFileUrl === _item.imageUrl) {
