@@ -8,7 +8,7 @@ import store from './src/store/store';
 function App(): JSX.Element {
     const googleSignInConfigure = () => {
         GoogleSignin.configure({
-            webClientId: '135091833054-l84ja05356etijq9hke6poqpqlarih4p.apps.googleusercontent.com',
+            webClientId: '135091833054-l3uf3n2eu2h4uk6l24h7a1gcvcnhjput.apps.googleusercontent.com',
         });
     };
 
