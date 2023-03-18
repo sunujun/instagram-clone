@@ -1,6 +1,7 @@
-import React from 'react';
-import { useWindowDimensions, View } from 'react-native';
+import React, { useRef } from 'react';
+import { Animated, useWindowDimensions, View } from 'react-native';
 import { Button } from './Button';
+import { DoubleTapButton } from './DoubleTapButton';
 import { Icon } from './Icon';
 import { RemoteImage } from './RemoteImage';
 import { Spacer } from './Spacer';
@@ -26,12 +27,48 @@ export const FeedListItem = ({
     onPressFavorite: () => void;
 }) => {
     const { width } = useWindowDimensions();
+    const scaleValue = useRef(new Animated.Value(0)).current;
+    const alphaValue = useRef(new Animated.Value(0)).current;
+
+    const onPressDoubleTap = () => {
+        onPressFavorite();
+        if (isLiked) {
+            return;
+        }
+        scaleValue.setValue(0);
+        alphaValue.setValue(1);
+        Animated.timing(scaleValue, {
+            toValue: 2,
+            duration: 500,
+            useNativeDriver: true,
+        }).start(() => {
+            setTimeout(() => {
+                alphaValue.setValue(0);
+            }, 1000);
+        });
+    };
 
     return (
         <Button onPress={onPressFeed}>
-            <View style={{ width: width, height: width }}>
-                <RemoteImage url={image} width={width} height={width} />
-            </View>
+            <DoubleTapButton onPressDoubleTap={onPressDoubleTap}>
+                <View style={{ width: width, height: width }}>
+                    <RemoteImage url={image} width={width} height={width} />
+                    <View
+                        style={{
+                            position: 'absolute',
+                            left: 0,
+                            right: 0,
+                            top: 0,
+                            bottom: 0,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}>
+                        <Animated.View style={{ transform: [{ scale: scaleValue }], opacity: alphaValue }}>
+                            <Icon name="heart" size={64} color="white" />
+                        </Animated.View>
+                    </View>
+                </View>
+            </DoubleTapButton>
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Button onPress={onPressFavorite}>
                     <View style={{ paddingHorizontal: 12, paddingVertical: 6 }}>
