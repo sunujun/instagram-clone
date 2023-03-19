@@ -8,9 +8,11 @@ import { Header } from '../components/Header/Header';
 import { Spacer } from '../components/Spacer';
 import { useTotalFeedList } from '../selectors/feed';
 import { MainTabScreenProps } from '../navigation/types';
+import { useMyInfo } from '../selectors/user';
 
 export const HomeScreen = () => {
     const feedList = useTotalFeedList();
+    const myInfo = useMyInfo();
     const dispatch = useDispatch<IFeedListDispatch>();
     const navigation = useNavigation<MainTabScreenProps<'Home'>['navigation']>();
 
@@ -31,11 +33,13 @@ export const HomeScreen = () => {
             <FlatList
                 data={feedList}
                 renderItem={({ item }) => {
+                    const isLiked = item.likeHistory.filter(likeUserId => likeUserId === myInfo?.uid).length > 0;
+
                     return (
                         <FeedListItem
                             image={item.imageUrl}
                             comment={item.content}
-                            isLiked={false}
+                            isLiked={isLiked}
                             likeCount={item.likeHistory.length}
                             writer={item.writer.name}
                             createdAt={item.createdAt}

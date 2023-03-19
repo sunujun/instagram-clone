@@ -32,10 +32,10 @@ export const FeedListItem = ({
     const alphaValue = useRef(new Animated.Value(0)).current;
 
     const onPressDoubleTap = () => {
-        onPressFavorite();
         if (isLiked) {
             return;
         }
+        onPressFavorite();
         scaleValue.setValue(0);
         alphaValue.setValue(1);
         Animated.timing(scaleValue, {
