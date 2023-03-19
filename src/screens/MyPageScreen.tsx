@@ -29,6 +29,7 @@ export const MyPageScreen = () => {
             </Header>
             <FlatList
                 data={data}
+                numColumns={3}
                 renderItem={({ item }) => {
                     return (
                         <Button onPress={() => navigation.navigate('FeedList', { list: data })}>
