@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { Animated, useWindowDimensions, View } from 'react-native';
+import { getMillisecondToDateString } from '../utils/dateUtils';
 import { Button } from './Button';
 import { DoubleTapButton } from './DoubleTapButton';
 import { Icon } from './Icon';
@@ -75,6 +76,9 @@ export const FeedListItem = ({
                         <Icon name={isLiked ? 'heart' : 'heart-outline'} size={20} color={isLiked ? 'red' : 'black'} />
                     </View>
                 </Button>
+                <Typography fontSize={16} color={'gray'}>
+                    {getMillisecondToDateString(createdAt)}
+                </Typography>
             </View>
             <View style={{ paddingHorizontal: 12 }}>
                 <Typography fontSize={16}>{`좋아요 ${likeCount}개`}</Typography>
